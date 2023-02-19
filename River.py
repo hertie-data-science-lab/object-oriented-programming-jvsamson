@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Sun Feb 14 17:56:53 2023
 
@@ -29,72 +28,9 @@ class Ecosystem:
 
         # Loop through each position in the river.
         for i in range(len(self.river)):
-
-            # If the creature in this position is a fish, update its position accordingly.
-            if isinstance(self.river[i], Fish):
-                # Choose a new position for the fish by randomly selecting from the adjacent positions.
-                if i == 0:  # for the first position in the river, fish can only move right or stay in the same position
-                    new_positions[i] = random.choice([i, i + 1])
-                elif i == len(self.river) - 1:  # for the last position in the river, fish can only move left or stay in the same position
-                    new_positions[i] = random.choice([i - 1, i])
-                else:  # for all other positions in the river, fish can move left, right or stay in the same position
-                    new_positions[i] = random.choice([i - 1, i, i + 1])
-
-                    # If the new position is empty, move the fish to that position.
-                    if self.river[new_positions[i]] is None:
-                        self.river[new_positions[i]] = self.river[i]
-                        self.river[i] = None
-
-                    # If the new position is occupied by another fish, keep both fish at its original position.
-                    elif isinstance(self.river[new_positions[i]], Fish):
-                        self.river[i] = None
-                        # Create a new fish and add it to a random empty position in the river.
-                        new_fish = Fish()
-                        # check if their is space available for a new bear, if so create a bear for random location
-                        for i in range(len(ecosystem.river)):
-                            if ecosystem.river[i] is None:
-                                empty_idx = random.choice([j for j in range(len(self.river)) if self.river[j] is None])
-                                self.river[empty_idx] = new_fish
-                            else:
-                                pass # skip creating a new bear if no space is available    
-
-                   # If the new position is occupied by a bear, the fish dies.
-                    elif isinstance(self.river[new_positions[i]], Bear):
-                        # Fish is eaten by the bear
-                        self.river[i] = None
-
-            # If the creature in this position is a bear, update its position accordingly.
-            elif isinstance(self.river[i], Bear):
-                # Choose a new position for the bear by randomly selecting from the adjacent positions.
-                if i == 0:  # for the first position in the river, bear can only move right or stay in the same position
-                    new_positions[i] = random.choice([i, i + 1])
-                elif i == len(self.river) - 1:  # for the last position in the river, bear can only move left or stay in the same position
-                    new_positions[i] = random.choice([i - 1, i])
-                else:  # for all other positions in the river, bear can move left, right or stay in the same position
-                    new_positions[i] = random.choice([i - 1, i, i + 1])
-
-                    # If the new position is empty, move the bear to that position.
-                    if self.river[new_positions[i]] is None:
-                        self.river[new_positions[i]] = self.river[i]
-                        self.river[i] = None
-
-                    # If the new position is occupied by another bear, create a new bear and add it to a random empty position in the river.
-                    elif isinstance(self.river[new_positions[i]], Bear):
-                        new_bear = Bear()
-                        # check if their is space available for a new bear, if so create a bear for random location
-                        for i in range(len(ecosystem.river)):
-                            if ecosystem.river[i] is None:
-                                empty_idx = random.choice([j for j in range(len(self.river)) if self.river[j] is None])
-                                self.river[empty_idx] = new_bear
-                            else:
-                                pass # skip creating a new bear if no space is available                       
-
-                    # If the new position is occupied by a fish, remove the fish from its position.
-                    elif isinstance(self.river[new_positions[i]], Fish):
-                        self.river[i] = None
+            # If the creature in this position is a fish or a bear, update its position accordingly.
+            if isinstance(self.river[i], Fish) or isinstance(self.river[i], Bear):
+                self.river[i].move()
 
         # Return the updated list of creature positions.
         return self.river
-
-# create an ecosystem with a river of length 20
-ecosystem = Ecosystem(20)
